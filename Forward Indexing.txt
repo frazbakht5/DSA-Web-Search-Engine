@@ -1,0 +1,45 @@
+@Override
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equalsIgnoreCase("text")) {
+            btext = false;
+            str = toAdd.toString();
+            System.out.println(Integer.parseInt(ID));
+        }
+        if (qName.equalsIgnoreCase("page")) {
+            IdCounter = 0;
+            str = removeStopWords(str, stopWords);
+            int Id = Integer.parseInt(ID);
+            String[] array = str.split(" ");
+            String[] titleWords = Title.toLowerCase().split("\\s+");
+            // Hashtable <String, int []> h1 = new Hashtable<String, int[]>();
+
+            String titlecount[] = Title.toLowerCase().split("\\s+");
+            toAdd = new StringBuilder();
+
+            Page page = new Page();
+
+            page.title = Title;
+            page.id = Integer.parseInt(ID);
+
+            for (int i = 0; i < array.length; i++) {
+                if (page.wordOccurances.containsKey(array[i])) {
+                    page.wordOccurances.get(array[i]).add(i);
+                } else {
+                    List<Integer> list = new ArrayList<Integer>();
+                    list.add(i);
+                    page.wordOccurances.put(array[i], list);
+                }
+                
+            }
+
+            try {
+                String directory = "F:\\DSA search engine\\forwardIndex\\" + page.id + ".txt";
+                FileOutputStream fileOut = new FileOutputStream(directory);
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(page);
+                out.close();
+                fileOut.close();
+            } catch (IOException i) {
+                i.printStackTrace();
+            }
