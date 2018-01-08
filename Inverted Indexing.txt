@@ -1,0 +1,52 @@
+ public void invertedIndex() throws ClassNotFoundException {
+        String address = "F:\\DSA search engine\\forwardIndex";
+        File folder = new File(address);
+
+        for (final File fileEntry : folder.listFiles()) {
+
+            try {
+                FileInputStream fileIn = new FileInputStream(fileEntry);
+                Page page = (Page) new ObjectInputStream(fileIn).readObject();
+                for (String key : page.wordOccurances.keySet()) {
+                    
+                    //File fileeWord = parentDir.createNewFile();
+                    String directory = "F:\\DSA search engine\\invertedIndex";
+
+                    String filename = key + ".txt";
+                    File parentDir = new File(directory);
+                    parentDir.mkdir();
+                    File filee = new File(parentDir, filename);
+                    boolean success = filee.createNewFile();
+
+                    if (filee.exists() || success) {
+                        FileWriter writer = new FileWriter(filee, true);
+                        BufferedWriter bufferedWriter = new BufferedWriter(writer);
+                         
+                    
+                    //writer.write(key + "\t");
+                    //Set S = h1.entrySet();
+                    
+                    int titleOcc=0;
+                    String titleArray[] = page.title.toLowerCase().split("\\s+ ");
+                    for(String word: titleArray){
+                        if(word.equals(key)){
+                            titleOcc++;
+                        }
+                    }
+                    pageRank=(titleOcc*2)+page.wordOccurances.get(key).size();
+                    writer.write(page.id+" ");
+                    writer.write(titleOcc+ " ");
+                    writer.write(page.wordOccurances.get(key).size()+" ");
+                    writer.write(pageRank+" ");
+                    writer.write(page.title+"\r\n");
+                    writer.close();
+                        
+                    }
+                }
+
+            } catch (IOException ex) {
+                Logger.getLogger(parseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
