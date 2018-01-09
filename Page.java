@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author Ihtisham Khan
+ * @author Urwah Asrar
  */
 public class Page implements Serializable{
     int id;
